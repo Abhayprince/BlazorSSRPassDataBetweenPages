@@ -1,0 +1,22 @@
+﻿@using System.Text.Json
+<h3>Passing @_username via Cookies</h3>
+
+@code {
+    private const string CookieName = "ap-ssr-data";
+    private const string UsernameCookie = "ssr-username";
+
+    [CascadingParameter]
+    public HttpContext HttpContext{ get; set; }
+
+    private string _username = "Abhay Prince";
+
+    protected override void OnInitialized()
+    {
+        HttpContext.Response.Cookies.Append(UsernameCookie, _username);
+
+        // get data from database
+        var appModel = new AppModel("Blazor SSR Passing Data", 2);
+        HttpContext.Response.Cookies.Append(CookieName, JsonSerializer.Serialize(appModel));
+
+    }
+}

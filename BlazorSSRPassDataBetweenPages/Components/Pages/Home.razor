@@ -1,0 +1,24 @@
+﻿@page "/"
+
+@using BlazorSSRPassDataBetweenPages.Components.Shared
+
+<PageTitle>Home</PageTitle>
+
+<h1>Pass Data from One Page to Another - Blazor SSR</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Using Query Strings</h2>
+            <PassDataUsingQueryString />
+        </div>
+        <div class="col-sm-6">
+            <h2>Using Cookies</h2>
+            <PassDataUsingCookie />
+        </div>
+    </div>
+</div>
+
+@code{
+    
+}

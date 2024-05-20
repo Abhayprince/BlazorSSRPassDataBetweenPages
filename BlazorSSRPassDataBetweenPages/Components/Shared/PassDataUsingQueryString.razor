@@ -1,0 +1,26 @@
+﻿
+<a href="/page-2?msg=Some Random message from Home Page&status=Success"> Go to Page 2 with Query String Data</a>
+<br />
+<a href="/page-2?status=@_status&msg=@_message"> Go to Page 2 with Dynamic Query String Data</a>
+
+
+@code {
+    private string _status = "pending";
+    private string? _message;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            // Get status and message from Database or from some service
+            _message = "Got data from database";
+            _status = "Success";
+            //throw new InvalidDataException("some exception message");
+        }
+        catch (Exception ex)
+        {
+            _message = ex.Message;
+            _status = "Error";
+        }
+    }
+}

@@ -1,0 +1,62 @@
+﻿@page "/page-2"
+@using System.Text.Json
+
+
+<h3>Page2</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>From Query Strings: </h3>
+            <h6>Status : @Status</h6>
+            <h6>Message: @Message</h6>
+        </div>
+        <div class="col-sm-6">
+            <h3>From Cookie</h3>
+            <h6>Username: @_messageFromCookie</h6>
+            <hr />
+            <h6>Raw Data: @_app</h6>
+            <hr />
+            <h6>App Name: @_app?.Name</h6>
+            <h6>App Version: @_app?.Version</h6>
+        </div>
+    </div>
+</div>
+
+@code {
+    private const string CookieName = "ap-ssr-data";
+    private const string UsernameCookie = "ssr-username";
+
+    [SupplyParameterFromQuery(Name = "msg")]
+    public string Message { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string Status { get; set; }
+
+    [CascadingParameter]
+    public HttpContext HttpContext { get; set; }
+
+    private string? _messageFromCookie;
+
+    private AppModel? _app;
+
+    protected override void OnInitialized()
+    {
+        //_messageFromCookie = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == CookieName)?.Value;
+        _messageFromCookie = HttpContext.Request.Cookies[UsernameCookie];
+        if(_messageFromCookie is not null)
+        {
+            // If this was one time use data only
+            // we should remove this cookie
+            HttpContext.Response.Cookies.Delete(UsernameCookie);
+        }
+
+        var appValue = HttpContext.Request.Cookies[CookieName];
+        if(appValue is not null)
+        {
+            _app = JsonSerializer.Deserialize<AppModel>(appValue);
+            // Delete this cookie if required
+        }
+    }
+
+}
